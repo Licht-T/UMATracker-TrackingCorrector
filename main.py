@@ -24,7 +24,7 @@ from queue import Queue
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsItem, QGraphicsItemGroup, QGraphicsPixmapItem, QGraphicsEllipseItem, QFrame, QFileDialog, QPushButton
-from PyQt5.QtGui import QPixmap, QImage, QPainter, QIcon
+from PyQt5.QtGui import QPixmap, QImage, QPainter, QIcon, QCursor
 from PyQt5.QtCore import QPoint, QPointF, QRectF, QEvent, Qt
 
 import cv2
@@ -159,10 +159,10 @@ class Ui_MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         self.inputPixmapItem = QGraphicsPixmapItem(self.inputPixmap)
         self.inputScene.addItem(self.inputPixmapItem)
 
-        self.rubberBand = QtWidgets.QRubberBand(QtWidgets.QRubberBand.Rectangle, self.inputGraphicsView)
         self.inputGraphicsView.mousePressEvent = self.inputGraphicsViewMousePressEvent
         self.inputGraphicsView.mouseMoveEvent = self.inputGraphicsViewMouseMoveEvent
         self.inputGraphicsView.mouseReleaseEvent = self.inputGraphicsViewMouseReleaseEvent
+        self.inputGraphicsView.keyPressEvent = self.inputGraphicsViewKeyPressEvent
 
         self.inputGraphicsView.viewport().installEventFilter(self)
 
@@ -175,30 +175,39 @@ class Ui_MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
 
     def inputGraphicsViewMousePressEvent(self, event):
         self.origin = QPoint(event.pos())
-        self.rubberBand.setGeometry(
-            QtCore.QRect(self.origin, QtCore.QSize()))
-        self.rubberBand.show()
 
         # Comment out to permit the view for sending the event to the child scene.
-        # QGraphicsView.mousePressEvent(self.inputGraphicsView, event)
+        QGraphicsView.mousePressEvent(self.inputGraphicsView, event)
 
     def inputGraphicsViewMouseMoveEvent(self, event):
-        if self.rubberBand.isVisible():
-            self.rubberBand.setGeometry(
-                QtCore.QRect(self.origin, event.pos()).normalized())
         # Comment out to permit the view for sending the event to the child scene.
-        # QGraphicsView.mouseMoveEvent(self.inputGraphicsView, event)
+        QGraphicsView.mouseMoveEvent(self.inputGraphicsView, event)
 
     def inputGraphicsViewMouseReleaseEvent(self, event):
-        if self.rubberBand.isVisible():
-            self.rubberBand.hide()
-            rect = self.rubberBand.geometry()
-            sceneRect = self.inputGraphicsView.mapToScene(rect).boundingRect()
-            self.zoomedGraphicsView.fitInView(QRectF(sceneRect))
-            self.zoomedGraphicsView.viewport().update()
         # Comment out to permit the view for sending the event to the child scene.
         self.inputGraphicsView.viewport().update()
-        # QGraphicsView.mouseReleaseEvent(self.inputGraphicsView, event)
+        QGraphicsView.mouseReleaseEvent(self.inputGraphicsView, event)
+        self.inputGraphicsView.viewport().setCursor(QtCore.Qt.ArrowCursor)
+
+    def inputGraphicsViewKeyPressEvent(self,event):
+        mousePosition = QCursor().pos()
+        mousePosition = self.inputGraphicsView.mapFromGlobal(mousePosition)
+        if event.type() == QtCore.QEvent.KeyPress:
+            key = event.key()
+            if key == QtCore.Qt.Key_Space:
+                self.videoPlaybackWidget.playButtonClicked()
+            elif key == QtCore.Qt.Key_A:
+                self.videoPlaybackWidget.movePrevButtonClicked()
+            elif key == QtCore.Qt.Key_D:
+                self.videoPlaybackWidget.moveNextButtonClicked()
+            elif key == QtCore.Qt.Key_Down:
+                self.inputGraphicsViewScaleDown()
+            elif key == QtCore.Qt.Key_Up:
+                self.inputGraphicsViewScaleUp()
+            elif key == QtCore.Qt.Key_R:
+                self.graphicsViewResized()
+        QGraphicsView.keyPressEvent(self.inputGraphicsView, event)
+
 
     def menuInit(self):
         self.actionSaveCSVFile.triggered.connect(self.saveCSVFile)
@@ -291,7 +300,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         self.inputScene.addItem(self.inputPixmapItem)
 
         self.inputGraphicsView.viewport().update()
-        self.graphicsViewResized()
+        # self.graphicsViewResized()
 
     def eventFilter(self, obj, event):
         if obj is self.inputGraphicsView.viewport() and event.type()==QEvent.Wheel:
@@ -303,6 +312,13 @@ class Ui_MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         print("resize")
         print(self.inputScene)
         self.inputGraphicsView.fitInView(QtCore.QRectF(self.inputPixmap.rect()), QtCore.Qt.KeepAspectRatio)
+
+    def inputGraphicsViewScaleDown(self):
+        scaleFactor = 1.15
+        self.inputGraphicsView.scale(1.0 / scaleFactor, 1.0 / scaleFactor)
+    def inputGraphicsViewScaleUp(self):
+        scaleFactor = 1.15
+        self.inputGraphicsView.scale(scaleFactor, scaleFactor)
 
     def evaluate(self):
         if not self.videoPlaybackWidget.isOpened():
