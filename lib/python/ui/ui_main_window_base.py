@@ -38,6 +38,16 @@ class Ui_MainWindowBase(object):
         self.videoPlaybackWidget.setObjectName("videoPlaybackWidget")
         self.verticalLayout.addWidget(self.videoPlaybackWidget)
         self.horizontalLayout.addWidget(self.groupBox)
+        self.optionViewButton = QtWidgets.QPushButton(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.optionViewButton.sizePolicy().hasHeightForWidth())
+        self.optionViewButton.setSizePolicy(sizePolicy)
+        self.optionViewButton.setMinimumSize(QtCore.QSize(16, 0))
+        self.optionViewButton.setMaximumSize(QtCore.QSize(16, 16777215))
+        self.optionViewButton.setObjectName("optionViewButton")
+        self.horizontalLayout.addWidget(self.optionViewButton)
         self.groupBox_2 = QtWidgets.QGroupBox(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(1)
@@ -123,6 +133,8 @@ class Ui_MainWindowBase(object):
         self.actionOpenCSVFile.setObjectName("actionOpenCSVFile")
         self.actionSaveCSVFile = QtWidgets.QAction(MainWindowBase)
         self.actionSaveCSVFile.setObjectName("actionSaveCSVFile")
+        self.actionSettings = QtWidgets.QAction(MainWindowBase)
+        self.actionSettings.setObjectName("actionSettings")
         self.menuFile.addAction(self.actionOpenCSVFile)
         self.menuFile.addAction(self.actionSaveCSVFile)
         self.menubar.addAction(self.menuFile.menuAction())
@@ -134,6 +146,7 @@ class Ui_MainWindowBase(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindowBase.setWindowTitle(_translate("MainWindowBase", "MainWindow"))
         self.groupBox.setTitle(_translate("MainWindowBase", "Tracking"))
+        self.optionViewButton.setText(_translate("MainWindowBase", "<"))
         self.groupBox_2.setTitle(_translate("MainWindowBase", "Zoom"))
         self.label_2.setText(_translate("MainWindowBase", "# of frames:"))
         self.overlayCheckBox.setText(_translate("MainWindowBase", "Overlay"))
@@ -143,6 +156,7 @@ class Ui_MainWindowBase(object):
         self.menuFile.setTitle(_translate("MainWindowBase", "File"))
         self.actionOpenCSVFile.setText(_translate("MainWindowBase", "Open CSV File"))
         self.actionSaveCSVFile.setText(_translate("MainWindowBase", "Save CSV FIle"))
+        self.actionSettings.setText(_translate("MainWindowBase", "Settings"))
 
 from .overlaid_graphics_view import OverlaidGraphicsView
 from .video_playback_widget import VideoPlaybackWidget

@@ -56,6 +56,31 @@
      </widget>
     </item>
     <item>
+     <widget class="QPushButton" name="optionViewButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>16</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>&lt;</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QGroupBox" name="groupBox_2">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -210,17 +235,22 @@
     <string>Save CSV FIle</string>
    </property>
   </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>OverlaidGraphicsView</class>
-   <extends>QGraphicsView</extends>
-   <header>.overlaid_graphics_view</header>
-  </customwidget>
   <customwidget>
    <class>VideoPlaybackWidget</class>
    <extends>QWidget</extends>
    <header>.video_playback_widget</header>
+  </customwidget>
+  <customwidget>
+   <class>OverlaidGraphicsView</class>
+   <extends>QGraphicsView</extends>
+   <header>.overlaid_graphics_view</header>
   </customwidget>
  </customwidgets>
  <resources/>

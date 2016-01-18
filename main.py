@@ -71,7 +71,17 @@ class Ui_MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         self.radiusSpinBox.valueChanged.connect(self.radiusSpinBoxValueChanged)
 
         self.frameNoSpinBox.valueChanged.connect(self.frameNoSpinBoxValueChanged)
+        self.optionViewButton.pressed.connect(self.optionViewButtonPressed)
+        self.groupBox_2.hide()
+        self.zoomedGraphicsView.hide()
 
+    def optionViewButtonPressed(self):
+        if  self.groupBox_2.isVisible():
+            self.optionViewButton.setText("<")
+            self.groupBox_2.hide()
+        else:
+            self.optionViewButton.setText(">")
+            self.groupBox_2.show()
     def overlayCheckBoxStateChanged(self, s):
         if self.overlayCheckBox.isChecked():
             self.frameBufferItemGroup.show()
@@ -169,6 +179,9 @@ class Ui_MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         self.inputGraphicsView.setMouseTracking(True)
         self.overlayScene = QGraphicsScene()
         self.inputGraphicsView.setOverlayScene(self.overlayScene)
+
+        self.zoomedGraphicsView.setScene(self.inputScene)
+        self.zoomedGraphicsView.setOverlayScene(self.overlayScene)
 
     def inputGraphicsViewMousePressEvent(self, event):
         self.origin = QPoint(event.pos())
