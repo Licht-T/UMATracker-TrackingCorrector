@@ -76,12 +76,13 @@ class Ui_MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         self.zoomedGraphicsView.hide()
 
     def optionViewButtonPressed(self):
-        if  self.groupBox_2.isVisible():
-            self.optionViewButton.setText("<")
-            self.groupBox_2.hide()
-        else:
-            self.optionViewButton.setText(">")
-            self.groupBox_2.show()
+        if self.videoPlaybackWidget.isVisible():
+            if self.groupBox_2.isVisible():
+                self.optionViewButton.setText("<")
+                self.groupBox_2.hide()
+            else:
+                self.optionViewButton.setText(">")
+                self.groupBox_2.show()
     def overlayCheckBoxStateChanged(self, s):
         if self.overlayCheckBox.isChecked():
             self.frameBufferItemGroup.show()
